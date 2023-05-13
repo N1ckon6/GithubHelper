@@ -7,5 +7,4 @@ interface UsersUseCase {
 
     suspend fun getUsersFromDb(): List<User>
 
-    suspend fun saveUsersToDb(users: List<User>)
 }

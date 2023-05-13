@@ -1,7 +1,7 @@
 package com.example.githubhelper.domain.repository
 
 import com.example.githubhelper.common.IoDispatcher
-import com.example.githubhelper.data.remote.db.DatabaseDao
+import com.example.githubhelper.data.db.DatabaseDao
 import com.example.githubhelper.data.remote.GithubHelperApi
 import com.example.githubhelper.data.repository.GithubHelperRepository
 import com.example.githubhelper.domain.mappers.toRepositoryDO
@@ -17,9 +17,9 @@ import javax.inject.Singleton
 
 @Singleton
 class GithubHelperRepositoryImpl @Inject constructor(
-        private val api: GithubHelperApi,
-        private val database: DatabaseDao,
-        @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val api: GithubHelperApi,
+    private val database: DatabaseDao,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : GithubHelperRepository {
 
     override suspend fun getUsers(): List<User> =
@@ -38,9 +38,9 @@ class GithubHelperRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveReposToDb(repos: List<UserRepository>, ownerId: Int?) {
+    override suspend fun saveReposToDb(repos: List<UserRepository>, ownerId: Int) {
         withContext(ioDispatcher) {
-            database.insertUsersRepos(repos.map { it.toRepositoryDO() })
+            database.insertUsersRepos(repos.map { it.toRepositoryDO(ownerId) })
         }
     }
 

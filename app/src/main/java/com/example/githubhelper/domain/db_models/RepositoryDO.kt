@@ -8,9 +8,9 @@ import com.example.githubhelper.common.Constants
 data class RepositoryDO(
     val ownerId: Int = 0,
     val id: Int = 0,
-    val name: String = "",
-    val updated_at: String = "",
-    val stargazers_count: Int = 0,
-    val language: String = "",
-    val url: String = ""
+    val name: String? = null,
+    val updated_at: String? = null,
+    val stargazers_count: Int? = null,
+    val language: String? = null,
+    val url: String? = null
 )

@@ -36,15 +36,15 @@ fun UserListScreen(
 ) {
     val viewModel: UserListViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-        viewModel.getUsersFromServ()
         viewModel.getUsersFromDb()
+        viewModel.getUsersFromServ()
     }
     val state = viewModel.state.value
     UserListContent(
         modifier = modifier,
         state = state,
         onUserClick = {
-            navController.navigate(Routes.UserRepositoriesRoutes.route + "/${it.login}" + "/${it.ownerId}")
+            navController.navigate(Routes.UserRepositoriesRoutes.route + "/${it.login}" + "/${it.id}")
         }
     )
 }
@@ -58,15 +58,20 @@ fun UserListContent(
     Box(
         modifier = modifier.background(Color.Gray)
     ) {
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
             items(state.users) { user ->
-                UserItem(user = user, onItemClick = { onUserClick(user) })
+                UserItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    user = user,
+                    onItemClick = { onUserClick(user) })
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
-        if (state.error != null) {
+        if (state.error != null && state.users.isEmpty()) {
             Text(
                 text = state.error.message ?: "",
                 color = MaterialTheme.colors.error,
@@ -77,7 +82,7 @@ fun UserListContent(
                     .align(Alignment.Center)
             )
         }
-        if (state.isLoading) {
+        if (state.isLoading && state.users.isEmpty()) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }

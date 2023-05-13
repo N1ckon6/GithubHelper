@@ -6,8 +6,8 @@ import com.example.githubhelper.common.Constants
 import com.example.githubhelper.common.DefaultDispatcher
 import com.example.githubhelper.common.IoDispatcher
 import com.example.githubhelper.common.MainDispatcher
-import com.example.githubhelper.data.remote.db.AppDatabase
-import com.example.githubhelper.data.remote.db.DatabaseDao
+import com.example.githubhelper.data.db.AppDatabase
+import com.example.githubhelper.data.db.DatabaseDao
 import com.example.githubhelper.data.remote.GithubHelperApi
 import dagger.Module
 import dagger.Provides

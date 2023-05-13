@@ -7,47 +7,48 @@ import com.example.githubhelper.domain.db_models.UserDO
 import com.example.githubhelper.domain.model.User
 import com.example.githubhelper.domain.model.UserRepository
 
-fun User.toUserDO() = UserDO(avatar_url = this.avatar_url, login = this.login)
+fun User.toUserDO() = UserDO(avatar_url = this.avatar_url, login = this.login, id = this.id ?: 0)
 
-fun UserDO.toUser() = User(avatar_url = this.avatar_url, login = this.login, ownerId = this.id)
+fun UserDO.toUser() = User(avatar_url = this.avatar_url, login = this.login, id = this.id)
 
-fun UserDto.toUser() : User {
+fun UserDto.toUser(): User {
     return User(
-        avatar_url = avatar_url ?: "",
-        login = login ?: "",
-        ownerId = id ?: 0
+        avatar_url = avatar_url,
+        login = login,
+        id = id
     )
 }
 
-fun UserRepository.toRepositoryDO() : RepositoryDO {
+fun UserRepository.toRepositoryDO(parentId: Int): RepositoryDO {
     return RepositoryDO(
-        ownerId = id ?: 0,
-        name = name ?: "",
-        updated_at = updated_at ?: "",
-        stargazers_count = stargazers_count ?: 0,
-        language = language ?: "",
-        url = url
-    )
-}
-
-fun RepositoryDO.toUserRepository() : UserRepository {
-    return UserRepository(
-        name = name ?: "",
-        updated_at = updated_at ?: "",
-        stargazers_count = stargazers_count ?: 0,
-        language = language ?: "",
+        ownerId = parentId,
+        name = name,
+        updated_at = updated_at,
+        stargazers_count = stargazers_count,
+        language = language,
         url = url,
         id = id ?: 0
     )
 }
 
-fun UserRepositoryDto.toUserRepository() : UserRepository {
+fun RepositoryDO.toUserRepository(): UserRepository {
     return UserRepository(
-        name = name ?: "",
-        updated_at = updated_at ?: "",
-        stargazers_count = stargazers_count ?: 0,
-        language = language ?: "",
-        url = html_url ?: "",
+        name = name,
+        updated_at = updated_at,
+        stargazers_count = stargazers_count,
+        language = language,
+        url = url,
+        id = id
+    )
+}
+
+fun UserRepositoryDto.toUserRepository(): UserRepository {
+    return UserRepository(
+        name = name,
+        updated_at = updated_at,
+        stargazers_count = stargazers_count,
+        language = language,
+        url = html_url,
         id = id ?: 0
     )
 }

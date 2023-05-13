@@ -20,13 +20,13 @@ class UserListViewModel @Inject constructor(
     fun getUsersFromServ() {
         viewModelScope.launch {
             runCatching {
-                _state.value = UserListState(isLoading = true)
+                _state.value = _state.value.copy(isLoading = true)
                 usersUseCaseImpl.getUsersFromServ()
             }.onSuccess {
-                _state.value = UserListState(users = it)
-                usersUseCaseImpl.saveUsersToDb(it)
+                if (it.isNotEmpty())
+                    _state.value = UserListState(users = it.sortedBy { user -> user.login })
             }.onFailure {
-                _state.value = UserListState(error = it)
+                _state.value = _state.value.copy(error = it, isLoading = false)
             }
         }
     }
@@ -37,9 +37,9 @@ class UserListViewModel @Inject constructor(
                 _state.value = _state.value.copy(isLoading = true)
                 usersUseCaseImpl.getUsersFromDb()
             }.onSuccess {
-                _state.value = UserListState(users = it)
+                _state.value = UserListState(users = it.sortedBy { user -> user.login })
             }.onFailure {
-                _state.value = UserListState(error = it)
+                _state.value = _state.value.copy(error = it, isLoading = false)
             }
         }
     }

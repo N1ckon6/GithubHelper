@@ -7,5 +7,4 @@ interface ReposUseCase {
 
     suspend fun getReposFromDb(ownerId: Int): List<UserRepository>
 
-    suspend fun saveReposToDb(repos:List<UserRepository>, ownerId: Int)
 }
