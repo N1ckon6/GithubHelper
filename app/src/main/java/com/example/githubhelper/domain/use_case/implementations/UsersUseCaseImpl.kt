@@ -19,5 +19,4 @@ class UsersUseCaseImpl @Inject constructor(
 
     override suspend fun getUsersFromDb(): List<User> = repository.getUsersFromDb()
 
-    override suspend fun saveUsersToDb(users: List<User>) = repository.saveUsersToDb(users)
 }

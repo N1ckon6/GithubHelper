@@ -11,7 +11,7 @@ interface GithubHelperRepository {
 
     suspend fun saveUsersToDb(users: List<User>)
 
-    suspend fun saveReposToDb(repos: List<UserRepository>,ownerId: Int?)
+    suspend fun saveReposToDb(repos: List<UserRepository>, ownerId: Int)
 
     suspend fun getUsersFromDb(): List<User>
 

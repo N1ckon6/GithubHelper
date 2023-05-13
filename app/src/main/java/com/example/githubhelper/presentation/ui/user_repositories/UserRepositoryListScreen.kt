@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
@@ -28,8 +29,8 @@ fun UserRepositoryListScreen(
 ) {
     val viewModel: UserRepositoriesViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-        viewModel.getReposFromServer(login, ownerId)
         viewModel.getReposFromDb(ownerId)
+        viewModel.getReposFromServer(login, ownerId)
     }
     val state = viewModel.state.value
     val uriHandle = LocalUriHandler.current
@@ -52,14 +53,17 @@ fun UserRepositoryContent(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(state.userRepositories) { repository ->
                 UserRepositoryItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     userRepository = repository,
                     onRepositoryClick = {
-                        onClick(it.url)
+                        repository.url?.let(onClick)
                     }
                 )
             }
         }
-        if (state.error != null) {
+        if (state.error != null && state.userRepositories.isEmpty()) {
             Text(
                 text = state.error.toString(),
                 color = MaterialTheme.colors.error,
@@ -70,8 +74,10 @@ fun UserRepositoryContent(
                     .align(Alignment.Center)
             )
         }
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        if (state.isLoading && state.userRepositories.isEmpty()) {
+            CircularProgressIndicator(modifier = Modifier
+                .align(Alignment.Center)
+                .size(90.dp))
         }
     }
 }

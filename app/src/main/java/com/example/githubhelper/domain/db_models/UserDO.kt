@@ -6,8 +6,8 @@ import com.example.githubhelper.common.Constants
 
 @Entity(tableName = Constants.USERS_TABLE_NAME)
 data class UserDO(
-    val avatar_url: String = "",
-    val login: String = "",
+    val avatar_url: String? = null,
+    val login: String? = null,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )

@@ -1,4 +1,4 @@
-package com.example.githubhelper.data.remote.db
+package com.example.githubhelper.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

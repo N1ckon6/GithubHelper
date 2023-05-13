@@ -20,13 +20,14 @@ class UserRepositoriesViewModel @Inject constructor(
     fun getReposFromServer(login: String, ownerId: Int) {
         viewModelScope.launch {
             runCatching {
-                _state.value = UserRepositoriesState(isLoading = true)
+                _state.value = _state.value.copy(isLoading = true)
                 reposUseCase.getReposFromServer(login, ownerId)
             }.onSuccess {
-                _state.value = UserRepositoriesState(userRepositories = it)
-                reposUseCase.saveReposToDb(it, ownerId)
+                if (it.isNotEmpty())
+                    _state.value =
+                        UserRepositoriesState(userRepositories = it.sortedBy { repo -> repo.name })
             }.onFailure {
-                _state.value = UserRepositoriesState(error = it)
+                _state.value = _state.value.copy(error = it, isLoading = false)
             }
         }
     }
@@ -37,7 +38,8 @@ class UserRepositoriesViewModel @Inject constructor(
                 _state.value = _state.value.copy(isLoading = true)
                 reposUseCase.getReposFromDb(ownerId)
             }.onSuccess {
-                _state.value = UserRepositoriesState(userRepositories = it)
+                _state.value =
+                    UserRepositoriesState(userRepositories = it.sortedBy { repo -> repo.name })
             }.onFailure {
                 _state.value = _state.value.copy(error = it, isLoading = false)
             }
